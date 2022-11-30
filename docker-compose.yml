@@ -22,7 +22,8 @@ services:
       - database
     ports:
       - '8110:8110'
-      - '3306:3306'
+    expose:
+      - '3306'
 
   backend:
     hostname: backend
