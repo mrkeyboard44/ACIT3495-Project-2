@@ -49,7 +49,7 @@ services:
       - '27017'
 
   database:
-    hostname: database
+    # hostname: database
     image: mysql:8
     env_file:
       - mysql.env

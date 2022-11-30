@@ -13,7 +13,7 @@ const __dirname = path.dirname(__filename);
 
 const APP_PORT = 8080;
 const END_POINT_PORT = 8110;
-const END_POINT_IP = "http://localhost"
+const END_POINT_IP = "http://20.127.144.221"
 const END_POINT_ROOT = `${END_POINT_IP}:${END_POINT_PORT}`;
 
 // const connection = mysql.createConnection({
