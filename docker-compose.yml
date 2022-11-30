@@ -22,8 +22,6 @@ services:
       - database
     ports:
       - '8110:8110'
-    # expose:
-    #   - '3306'
 
   backend:
     hostname: backend
@@ -49,16 +47,20 @@ services:
       - '27017'
 
   database:
-    # hostname: database
-    image: mysql:8
+    # hostname: database_mysql
+    image: mysql:5.7.15
+    restart: always
     env_file:
       - mysql.env
+    # volumes:
+    #   - adata:/var/lib/mysql
+    # command: bash -c "--default-authentication-plugin=mysql_native_password"
     ports:
       - '3306:3306'
     expose:
       - '3306'
-    # volumes:
-    #   - adata:/var/lib/mysql
+    volumes:
+      - adata:/var/lib/mysql
 
 
 volumes:
