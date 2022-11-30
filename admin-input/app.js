@@ -27,8 +27,8 @@ const connection = mysql.createConnection({
   host: process.env.MYSQL_HOST,
   user: 'root',
   password: process.env.MYSQL_ROOT_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
-  auth_plugin: 'caching_sha2_password'
+  database: process.env.MYSQL_DATABASE
+  // auth_plugin: 'caching_sha2_password'
 });
 
 
