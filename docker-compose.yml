@@ -47,7 +47,7 @@ services:
       - '27017'
 
   database:
-    # hostname: database_mysql
+    hostname: database_mysql
     image: mysql:8
     restart: always
     env_file:
