@@ -4,6 +4,7 @@ const argon2 = require('argon2')
 const upload = multer({ dest: 'tmp/csv/' });
 const fs = require("fs");
 const { parse } = require("csv-parse");
+require('dotenv').config()
 
 const mysql = require('mysql');
 
@@ -20,14 +21,14 @@ const path = require('path');
 
 const router_PORT = 8110;
 const SOCKET_PORT = 8111;
-
+console.log(process.env.HOST)
 
 const connection = mysql.createConnection({
-  host: "localhost",
-  user: "openapi",
-  password: "password",
-  database: "weather",
-  port: 3306
+  host: process.env.MYSQL_HOST,
+  user: 'root',
+  password: process.env.MYSQL_ROOT_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
+  auth_plugin: 'caching_sha2_password'
 });
 
 
