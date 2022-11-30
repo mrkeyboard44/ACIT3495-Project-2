@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+data:
+  ADMIN_INPUT_HOST: "admin-input"
+  ADMIN_INPUT_PORT: "8080"
+  VIEW_RESULTS_HOST: "view-results"
+  VIEW_RESULTS_PORT: "8100"

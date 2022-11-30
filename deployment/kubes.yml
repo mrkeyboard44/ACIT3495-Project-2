@@ -1,0 +1,321 @@
+# # login
+# --- 
+# apiVersion: v1
+# kind: Service
+# metadata: 
+#   labels: 
+#     app: login
+#   name: login
+# spec: 
+#   clusterIP: None
+#   ports:
+#   - name: login-service
+#     port: 8110
+#     targetPort: 8110
+#   selector: 
+#     app: login
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: login
+#   labels:
+#     app: login
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: login
+#   template:
+#     metadata:
+#       labels:
+#         app: login
+#     spec:
+#       containers:
+#       - name: login
+#         image: mrkeyboard/3495_project_2:login
+#         ports:
+#           - containerPort: 8110
+#             name: login
+#         envFrom:
+#           - configRef:
+#             name: frontend-config
+
+
+# # view-results
+# --- 
+# apiVersion: v1
+# kind: Service
+# metadata: 
+#   labels: 
+#     app: view-results
+#   name: view-results
+# spec: 
+#   clusterIP: None
+#   ports:
+#   - name: view-results-service
+#     port: 8100
+#     targetPort: 8100
+#   selector: 
+#     app: view-results
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: view-results
+#   labels:
+#     app: view-results
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: view-results
+#   template:
+#     metadata:
+#       labels:
+#         app: view-results
+#     spec:
+#       containers:
+#       - name: view-results
+#         image: mrkeyboard/3495_project_2:view-results
+#         ports:
+#           - containerPort: 8100
+#             name: view-results
+#         envFrom:
+#           - secretRef:
+#             name: mongo-secret
+#         envFrom:
+#           - configRef:
+#             name: mongo-config
+
+
+# # admin-input
+# --- 
+# apiVersion: v1
+# kind: Service
+# metadata: 
+#   labels: 
+#     app: admin-input
+#   name: admin-input
+# spec: 
+#   clusterIP: None
+#   ports:
+#   - name: admin-input-service
+#     port: 8080
+#     targetPort: 8080
+#   selector: 
+#     app: admin-input
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: admin-input
+#   labels:
+#     app: admin-input
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: admin-input
+#   template:
+#     metadata:
+#       labels:
+#         app: admin-input
+#     spec:
+#       containers:
+#       - name: admin-input
+#         image: mrkeyboard/3495_project_2:admin-input
+#         ports:
+#           - containerPort: 8080
+#             name: admin-input
+#         envFrom:
+#           - secretRef:
+#             name: mysql-secret
+#         envFrom:
+#           - configRef:
+#             name: mysql-config
+
+# backend
+--- 
+apiVersion: v1
+kind: Service
+metadata: 
+  labels: 
+    app: backend
+  name: backend
+spec: 
+  
+  ports:
+  - name: backend-service
+    port: 8090
+    targetPort: 8090
+  selector: 
+    app: backend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: mrkeyboard/3495_project_2:backend
+        ports:
+          - containerPort: 8090
+            name: backend
+        envFrom:
+          - secretRef:
+            name: mysql-secret
+        envFrom:
+          - secretRef:
+            name: mongo-secret
+        envFrom:
+          - configRef:
+            name: mysql-config
+        envFrom:
+          - configRef:
+            name: mongo-config
+
+--- 
+apiVersion: v1
+kind: Service
+metadata: 
+  labels: 
+    app: dataset
+  name: datastore
+spec: 
+  clusterIP: None
+  ports: 
+  - name: datastore
+    port: 27017
+    targetPort: 27017
+  selector: 
+    app: datastore
+# datastore
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datastore
+  labels:
+    app: datastore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datastore
+  template:
+    metadata:
+      labels:
+        app: datastore
+    spec:
+      containers:
+      - name: datastore
+        image: mongo:latest
+        restart: always
+        envFrom:
+          - secretRef:
+            name: mysql-secret
+        ports: 
+          - conatinerPort: 27017
+            name: datastore
+        # networks:
+        #   - back-tier
+        volumeMounts:
+          - name: datastore-data
+            mountPath: /data/db
+        envFrom:
+          - secretRef:
+            name: mongo-secret
+      volumes:
+          - name: datastore-data
+            persistentVolumeClaim:
+              claimName: mongodb-pv-claim
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+# Database
+
+--- 
+apiVersion: v1
+kind: Service
+metadata: 
+  labels: 
+    app: dataset
+  name: database
+spec: 
+  clusterIP: None
+  ports: 
+  - name: datastore
+    port: 3306
+    targetPort: 3306
+  selector: 
+    app: datastore
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+  labels:
+    app: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+      - name: database
+        image: mysql:8
+        ports: 
+          - conatinerPort: 3306
+            name: database
+        # networks:
+        #   - back-tier
+        volumeMounts:
+          - name: database-data
+            mountPath: /var/lib/mysql
+        envFrom:
+          - secretRef:
+            name: mysql-secret
+      volumes:
+          - name: database-data
+            persistentVolumeClaim:
+              claimName: mysql-pv-claim
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
