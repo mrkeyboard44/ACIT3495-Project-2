@@ -53,18 +53,17 @@ def get_data() -> dict:
         data = list()
         print(tables)
         for table in tables:
-            if table[0] != 'accounts':
-                day = dict()
-                tablename = table[0]
-                filename = tablename.rsplit('_', 1)[1]
-                day['datetime'] = filename
-                crs.execute(f'''SELECT * FROM {tablename};''')
-                raw_data = crs.fetchall()
-                temp_range = dict()
-                for row in raw_data:
-                    temp_range[row[1]] = row[2]
-                day['temp_range'] = temp_range
-                data.append(day)
+            day = dict()
+            tablename = table[0]
+            filename = tablename.rsplit('_', 1)[1]
+            day['datetime'] = filename
+            crs.execute(f'''SELECT * FROM {tablename};''')
+            raw_data = crs.fetchall()
+            temp_range = dict()
+            for row in raw_data:
+                temp_range[row[1]] = row[2]
+            day['temp_range'] = temp_range
+            data.append(day)
         # 
     return data
 
