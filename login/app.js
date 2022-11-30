@@ -12,17 +12,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const APP_PORT = 8080;
-const END_POINT_PORT = 8110;
-const END_POINT_IP = "http://20.127.144.221"
-const END_POINT_ROOT = `${END_POINT_IP}:${END_POINT_PORT}`;
-
-// const connection = mysql.createConnection({
-//     host: "localhost",
-//     user: "openapi",
-//     password: "password",
-//     database: "weather",
-//     port: 3306
-// });
+const END_POINT_PORT = [8110,8100];
+const END_POINT_IP = "http://localhost"
 
 const app = express();
 
@@ -46,10 +37,16 @@ app.post('/auth', async function(request, response) {
 	// Capture the input fields
 	let username = request.body.username;
 	let password = request.body.password;
+    let admin = request.body.admin;
 	// Ensure the input fields exists and are not empty
+    console.log('admin',admin)
+    let port_index = 1
+    if (admin) {
+        port_index = 0
+    }
 	if (username && password) {
 
-        login(END_POINT_ROOT, username, password).then((results) => {
+        login(`${END_POINT_IP}:${END_POINT_PORT[port_index]}`, username, password).then((results) => {
             if (results == 'error') throw error;
             // If the account exists
             if (results.length > 0) {
@@ -57,7 +54,7 @@ app.post('/auth', async function(request, response) {
                 
                 // Redirect to home page
                 console.log('yo im in')
-                response.redirect(`${END_POINT_ROOT}/login?${results[0]}&u=${results[1]}`);     
+                response.redirect(`${END_POINT_IP}:${END_POINT_PORT[port_index]}/login?${results[0]}&u=${results[1]}`);     
             } else {
                 response.send('Incorrect Username and/or Password!');
             }			
@@ -105,38 +102,6 @@ app.post('/list-db', (req, res) => {
     list_db()
     res.redirect('/');
 })
-
-
-
-// connection.connect((err) => {
-    //     if (err) reject(err);
-    // });
-
-    
-
-    
-    
-//     const data_to_db = (datetime, temp) => {
-//         const sql = `INSERT INTO weather (datetime, temp) VALUES ("${datetime.toString()}", ${temp});`
-//         return new Promise((resolve, reject) => {
-//             connection.query(sql, (err, results) => {
-//                 if (err) reject(err);
-//                 resolve(results);
-//             });
-//         });
-// }
-
-// const insert_data = (data) => {
-//     if (data.time != null && data.date != null) {
-//         let date = data.date.split('-')
-//         let time = data.time.split(':')
-//         let datetime = new Date(date[0], Number(date[1]) - 1, date[2], time[0], time[1])
-//         return data_to_db(datetime, data.temp)
-//     } else {
-//         let new_date = new Date.now()
-//         return data_to_db(new_date, data)
-//     }
-// };
 
 const login = async (END_POINT_ROOT, username, password) => {
   

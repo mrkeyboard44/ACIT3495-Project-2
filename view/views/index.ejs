@@ -3,11 +3,12 @@
 <body>
   <link rel="stylesheet" href="static/style.css">
   <div id="root">
-    <h1>Welcome admin!</h1>
-    <form method="POST" action="/submit-data" enctype="multipart/form-data">
-      <input type="file" name="file">
-      <input type="submit" />
-    </form>
+    <h1>Welcome user!</h1>
+    <% for(var i=0; i<results.temp_rangelength; i++){ %>
+      <h1><%= articles[i].title %></h1>
+      <h3><%= articles[i].author %></h3>
+      <h4><%= articles[i].date %></h4>
+      <% } %>
   </div>
 </body>
 </html>

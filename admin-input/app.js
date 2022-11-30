@@ -25,8 +25,8 @@ console.log(process.env.HOST)
 
 const connection = mysql.createConnection({
   host: process.env.MYSQL_HOST,
-  user: 'root',
-  password: process.env.MYSQL_ROOT_PASSWORD,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE,
   insecureAuth: true
 });

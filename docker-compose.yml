@@ -11,18 +11,6 @@ services:
   #   ports:
   #     - "80:80"
   
-  admin-input:
-    hostname: admin-input
-    build: 
-      context: ./admin-input
-    image: app3495_admin_input:latest
-    env_file:
-      - config.env
-    depends_on:
-      - database
-    ports:
-      - '8110:8110'
-
   backend:
     hostname: backend
     build: 
@@ -47,21 +35,16 @@ services:
       - '27017'
 
   database:
-    hostname: database_mysql
-    image: mysql:5.7
-    restart: always
+    hostname: database
+    image: mysql:8
     env_file:
       - mysql.env
-    # volumes:
-    #   - adata:/var/lib/mysql
-    # command: bash -c "--default-authentication-plugin=mysql_native_password"
+    volumes:
+      - adata:/var/lib/mysql
     ports:
       - '3306:3306'
     expose:
       - '3306'
-    volumes:
-      - adata:/var/lib/mysql
-
 
 volumes:
   adata:

@@ -20,12 +20,12 @@ logging.basicConfig(
 hostname = socket.gethostname()
 
 CONFIG = {
-    'user': os.getenv('MYSQL_USER', 'admin'), 
-    'password': os.getenv('MYSQL_PASSWORD', 'temp'), 
+    'user': os.getenv('MYSQL_USER', 'openapi'), 
+    'password': os.getenv('MYSQL_PASSWORD', 'password'), 
     'host': os.getenv('MYSQL_HOST', '127.0.0.1'), 
     'port': os.getenv('MYSQL_PORT', 3306), 
-    'database': os.getenv('MYSQL_DATABASE', 'weather'), 
-    'auth_plugin': 'caching_sha2_password'
+    'database': os.getenv('MYSQL_DATABASE', 'weather')
+    # 'auth_plugin': 'caching_sha2_password'
 }
 MDB_USER = os.getenv('MONGO_INITDB_ROOT_USERNAME', 'root')
 MDB_PASS = os.getenv('MONGO_INITDB_ROOT_PASSWORD', 'mongroot')
@@ -51,18 +51,20 @@ def get_data() -> dict:
         crs.execute('''SHOW TABLES;''')
         tables = crs.fetchall()
         data = list()
+        print(tables)
         for table in tables:
-            day = dict()
-            tablename = table[0]
-            filename = tablename.rsplit('_', 1)[1]
-            day['datetime'] = filename
-            crs.execute(f'''SELECT * FROM {tablename};''')
-            raw_data = crs.fetchall()
-            temp_range = dict()
-            for row in raw_data:
-                temp_range[row[1]] = row[2]
-            day['temp_range'] = temp_range
-            data.append(day)
+            if table[0] != 'accounts':
+                day = dict()
+                tablename = table[0]
+                filename = tablename.rsplit('_', 1)[1]
+                day['datetime'] = filename
+                crs.execute(f'''SELECT * FROM {tablename};''')
+                raw_data = crs.fetchall()
+                temp_range = dict()
+                for row in raw_data:
+                    temp_range[row[1]] = row[2]
+                day['temp_range'] = temp_range
+                data.append(day)
         # 
     return data
 

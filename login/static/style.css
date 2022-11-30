@@ -56,3 +56,9 @@ body {
   background-color: #2868c7;
     transition: background-color 0.2s;
 }
+
+h2 {
+    padding: 0 15px;
+    padding-top: 5px;
+    font-weight: 300;
+}

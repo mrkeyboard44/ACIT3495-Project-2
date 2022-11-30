@@ -10,12 +10,12 @@ from pymongo import MongoClient
 
 
 CONFIG = {
-    'user': 'admin', 
-    'password': 'temp', 
+    'user': 'openapi', 
+    'password': 'password', 
     'host': '127.0.0.1', 
     'port': 3306, 
     'database': 'weather', 
-    'auth_plugin': 'caching_sha2_password'
+    # 'auth_plugin': 'caching_sha2_password'
 }
 logging.basicConfig(
     format='[%(asctime)s] - - %(levelname)s - - %(message)s', 
