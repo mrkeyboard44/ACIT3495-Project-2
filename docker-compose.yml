@@ -53,12 +53,12 @@ services:
     image: mysql:8
     env_file:
       - mysql.env
-    volumes:
-      - adata:/var/lib/mysql
     ports:
       - '3306:3306'
     expose:
       - '3306'
+    volumes:
+      - adata:/var/lib/mysql
 
 
 volumes:
