@@ -53,6 +53,7 @@ services:
       - mysql.env
     # volumes:
     #   - adata:/var/lib/mysql
+    command: bash -c "--default-authentication-plugin=mysql_native_password"
     ports:
       - '3306:3306'
     expose:
