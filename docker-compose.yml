@@ -22,6 +22,7 @@ services:
       - database
     ports:
       - '8110:8110'
+      - '3306:3306'
 
   backend:
     hostname: backend
@@ -47,7 +48,7 @@ services:
       - '27017'
 
   database:
-    hostname: database_mysql
+    # hostname: database_mysql
     image: mysql:5.7.15
     restart: always
     env_file:
