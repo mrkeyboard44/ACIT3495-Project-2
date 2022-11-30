@@ -21,7 +21,7 @@ services:
     depends_on:
       - database
     ports:
-      - '8090:8090'
+      - '8110:8110'
 
   backend:
     hostname: backend
