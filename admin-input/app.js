@@ -24,7 +24,7 @@ const SOCKET_PORT = 8111;
 console.log(process.env.HOST)
 
 const connection = mysql.createConnection({
-  host: "127.0.0.1",
+  host: process.env.MYSQL_HOST,
   user: 'root',
   password: process.env.MYSQL_ROOT_PASSWORD,
   database: process.env.MYSQL_DATABASE,
