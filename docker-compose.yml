@@ -48,7 +48,8 @@ services:
 
   database:
     hostname: database
-    image: mysql:8
+    image: mysql:5.7
+    restart: always
     env_file:
       - mysql.env
     # volumes:
@@ -58,6 +59,9 @@ services:
       - '3306:3306'
     expose:
       - '3306'
+    volumes:
+      - adata:/var/lib/mysql
+
 
 volumes:
   adata:
