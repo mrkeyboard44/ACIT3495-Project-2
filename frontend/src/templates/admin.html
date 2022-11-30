@@ -1,0 +1,27 @@
+{%extends "base.html" %}
+{%block content%}
+<div id="content-container">
+  <div id="content-container-center">
+    {% for table in data %}
+    <h3>{{ table.filename }}</h3>
+    <div>
+        <table>
+            <tr>
+                <th>Hour</th>
+                <th>Temperature</th>
+            </tr>
+            {% for item in table.data %}
+            <tr>
+                <td>{{item.time}}</td>
+                <td>{{item.temp}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endfor %}
+    <div>
+        <a class="nav-link" href="/">Return</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

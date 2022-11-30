@@ -1,0 +1,4 @@
+APScheduler==3.9.1
+mysql-connector-python==8.0.31
+pymongo==4.3.3
+requests==2.25.1

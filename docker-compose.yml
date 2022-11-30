@@ -1,0 +1,50 @@
+---
+version: '3'
+services:
+  # frontend:
+  #   hostname: frontend
+  #   build: 
+  #     context: ./frontend
+  #   image: app3495_frontend:latest
+  #   env_file:
+  #     - config.env
+  #   ports:
+  #     - "80:80"
+  
+  backend:
+    hostname: backend
+    build: 
+      context: ./backend
+    image: app3495_backend:latest
+    env_file:
+      - config.env
+    depends_on:
+      - database
+      - datastore
+    ports:
+      - '8090:8090'
+  
+  datastore:
+    hostname: datastore
+    image: mongo:latest
+    env_file:
+      - mongo.env
+    ports:
+      - '27017:27017'
+    expose:
+      - '27017'
+
+  database:
+    hostname: database
+    image: mysql:8
+    env_file:
+      - mysql.env
+    volumes:
+      - adata:/var/lib/mysql
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+
+volumes:
+  adata:

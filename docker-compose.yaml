@@ -1,0 +1,74 @@
+# version is now using "compose spec"
+# v2 and v3 are now combined!
+# docker-compose v1.27+ required
+
+services:
+  api:
+    build: ./api
+    # use python rather than gunicorn for local dev
+    command: python app.py
+    depends_on:
+      mongodb:
+        condition: service_healthy 
+    volumes:
+     - ./vote:/app
+    ports:
+      - "8080:80"
+    networks:
+      - front-tier
+      - back-tier
+
+  react:
+    build: ./react
+    # use nodemon rather than node for local dev
+    command: nodemon server.js
+    depends_on:
+      mysql:
+        condition: service_healthy 
+    volumes:
+      - ./result:/app
+    ports:
+      - "5001:80"
+      - "5858:5858"
+    networks:
+      - front-tier
+      - back-tier
+
+  node:
+    build:
+      context: ./node
+    command: nodemon app.js
+    depends_on:
+      mongodb:
+        condition: service_healthy 
+      mysql:
+        condition: service_healthy 
+    networks:
+      - back-tier
+
+  mongodb:
+    image: damoun1380/mongo:latest
+    environment:
+      MONGO_INITDB_USERNAME: 'mongoUser'
+      MONGO_INITDB_ROOT_PASSWORD: 'Password'
+    volumes:
+      - "./healthchecks:/healthchecks"
+    ports: ["27017"]
+    networks:
+    - back-tier
+
+  mysql:
+    image: damoun1380/mysql-project:latest
+    environment:
+      MYSQL_USER: "mainUser"
+      MYSQL_PASSWORD: "Password"
+    ports: ["3306"]
+    networks:
+      - back-tier
+
+volumes:
+  db-data:
+
+networks:
+  front-tier:
+  back-tier:

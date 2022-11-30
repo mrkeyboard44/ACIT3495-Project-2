@@ -1,0 +1,5 @@
+.gitignore
+# Envvars
+.venv
+# Pycaches
+__*__

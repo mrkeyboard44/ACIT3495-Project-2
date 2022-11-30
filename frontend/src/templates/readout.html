@@ -1,0 +1,17 @@
+{%extends "base.html" %}
+{%block content%}
+<div id="content-container">
+  <div id="content-container-center">
+    <div>
+      <h3>Upload sucessful!</h3>
+      <p>{{ filename }}</p>
+    </div>
+    <div>
+        <a class="nav-link" href="/">Return</a>
+    </div>
+    <div id="hostname">
+      Processed by container ID {{hostname}}
+    </div>
+  </div>
+</div>
+{% endblock %}
